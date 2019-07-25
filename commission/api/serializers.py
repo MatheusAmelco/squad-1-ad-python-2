@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from api.models import Commission_plan, Sellers, Sales
+from .models import Commission_plan, Sellers, Sales
 
 
 class CommissionPlanSerializer(serializers.ModelSerializer):

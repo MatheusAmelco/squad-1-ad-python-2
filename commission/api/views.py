@@ -1,8 +1,9 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from api.models import Commission_plan, Sales, Sellers
-from api.serializers import CommissionPlanSerializer, SalesSerializer, SellersSerializer, CheckCommissionSerializer
+
+from .models import Sales
+from .serializers import CommissionPlanSerializer, SalesSerializer, SellersSerializer, CheckCommissionSerializer
 
 
 @api_view(["POST"])
@@ -12,7 +13,8 @@ def sellers(request):
         if serializer.is_valid():
             serializer.save()
             return Response({"id": serializer.data["id"]}, status=status.HTTP_201_CREATED)
-        return Response({"message": "Bad request. Please check syntax and try again"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "Bad request. Please check syntax and try again"},
+                        status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["POST"])
@@ -22,24 +24,28 @@ def commissions(request):
         if serializer.is_valid():
             serializer.save()
             return Response({"id": serializer.data["id"]}, status=status.HTTP_201_CREATED)
-        return Response({"message": "Bad request. Please check syntax and try again"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "Bad request. Please check syntax and try again"},
+                        status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["POST"])
 def month_commission(request):
     if request.method == "POST":
         try:
-                calc = Sales()
-                calculated_amount = calc.calc_commission(
-                    request.data["sellers_id"], request.data["amount"])
+            calc = Sales()
+            calculated_amount = calc.calc_commission(
+                request.data["sellers_id"], request.data["amount"])
         except:
-                return Response({"message": "Bad request. Please check syntax and try again"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"message": "Bad request. Please check syntax and try again"},
+                            status=status.HTTP_400_BAD_REQUEST)
         request.data["commission"] = calculated_amount
         serializer = SalesSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            return Response({"id": serializer.data["id"], "commission": serializer.data["commission"], }, status=status.HTTP_201_CREATED)
-        return Response({"message": "Bad request. Please check syntax and try again"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"id": serializer.data["id"], "commission": serializer.data["commission"], },
+                            status=status.HTTP_201_CREATED)
+        return Response({"message": "Bad request. Please check syntax and try again"},
+                        status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(["GET"])
@@ -55,5 +61,7 @@ def check_commission(request):
         serializer = CheckCommissionSerializer(data=request.data)
         if serializer.is_valid():
             cc = Sales()
-            return Response(cc.check_commission(request.data["sellers_id"], request.data["amount"]), status=status.HTTP_201_CREATED)
-        return Response({"message": "Bad request. Please check syntax and try again"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(cc.check_commission(request.data["sellers_id"], request.data["amount"]),
+                            status=status.HTTP_201_CREATED)
+        return Response({"message": "Bad request. Please check syntax and try again"},
+                        status=status.HTTP_400_BAD_REQUEST)

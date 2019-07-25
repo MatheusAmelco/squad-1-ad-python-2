@@ -1,10 +1,10 @@
 from django.urls import path
-from api import views
+from .views import sellers, commissions, month_commission, vendedores, check_commission
 
 urlpatterns = [
-    path('sellers/', views.sellers),
-    path('commissions/', views.commissions),
-    path('month_commission/', views.month_commission),
-    path('vendedores/<int:month>/', views.vendedores),
-    path('check_commission/', views.check_commission),
+    path('sellers/', sellers),
+    path('commissions/', commissions),
+    path('month_commission/', month_commission),
+    path('vendedores/<int:month>/', vendedores),
+    path('check_commission/', check_commission),
 ]
